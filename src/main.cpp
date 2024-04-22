@@ -1,4 +1,4 @@
-#define SERVO_SPEED 2 // servo speed in ms
+#define SERVO_SPEED  15// servo speed in ms
 #include <Servo.h>
 #include <Arduino.h>
 
@@ -15,8 +15,8 @@ Servo rear_left;   // rear left leg
 
 #define front_left_pin 9
 #define front_right_pin 7
-#define rear_left_pin 22
-#define rear_right_pin 23
+#define rear_left_pin 11
+#define rear_right_pin 5
 /*
 Actual pins
 #define rear_left_pin 11
@@ -60,6 +60,50 @@ void setup()
 void loop()
 {
   static unsigned long servo_time;
+
+  if (servoPosCheck()) {
+    // if all servos are in desired position, update desired position
+    if (set == 1) {
+        setServoPos(80, 180, 180, 80);
+        set = 2;
+        //Gait 1 crosslegged
+    } else if (set == 2) {
+        setServoPos(0, 100, 100, 0);
+        set = 1;
+        //Step 2 of gait 1 crosslegged
+    }
+
+    if (set == 3) {
+        setServoPos(0, 180, 180, 0);
+        set = 4;
+        //Gait 2
+    } else if (set == 4) {
+        setServoPos(80, 180, 180, 0);
+        set = 5;
+        //Step 2 of gait 2
+    } else if (set == 5) {
+        setServoPos(0, 100, 180, 0);
+        set = 6;
+        //Step 2 of gait 2
+    } else if (set == 6) {
+        setServoPos(0, 180, 100, 0);
+        set = 7;
+        //Step 2 of gait 2
+    }else if (set == 7) {
+        setServoPos(0, 180, 180, 80);
+        set = 3;
+        //Step 2 of gait 2
+    }
+
+    if (set == 8) {
+      setServoPos(50, 130, 180, 0);
+      set = 9;
+    } else if (set == 9) {
+      setServoPos(0, 180, 100, 80);
+      set = 8;
+    }
+
+  }
   
   // check time since last servo position update 
   if ((millis()-servo_time) >= SERVO_SPEED) {
@@ -80,24 +124,5 @@ void loop()
     else if (rear_left_pos < rear_left.read()) rear_left.write(rear_left.read() - 1);
   }
 
-
-
-  if (servoPosCheck()) {
-    // if all servos are in desired position, update desired position
-    if (set == 1) {
-        setServoPos(0, 60, 60, 0);
-        set = 2;
-        Serial.println("set 2");
-    }else if (set == 2) {
-        setServoPos(60, 180, 180, 60);
-        set = 3;
-        Serial.println("set 3");
-    }else if (set == 3) {
-        setServoPos(40, 140, 140, 40);
-        set = 1;
-        Serial.println("set 1");
-    }
-
-  }
   //delay(1000);
 }
