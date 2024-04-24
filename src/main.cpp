@@ -56,53 +56,51 @@ void setup()
 
 }
 
+void crawlingGait() {
+  // if all servos are in desired position, update desired position
+    if (set == 1) {
+        setServoPos(80, 180, 180, 80);
+        set = 2;
+        //Gait 1 crosslegged
+    } else if (set == 2) {
+        setServoPos(80, 100, 100, 80);
+        set = 3;
+    } else if (set == 3) {
+        setServoPos(0, 100, 100, 0);
+        set = 1;
+        //Step 2 of gait 1 crosslegged
+    }
+}
+
+void undulatingGait() {
+    if (set == 1) {
+      setServoPos(57, 130, 180, 0);
+      set = 2;
+    } else if (set == 2) {
+      setServoPos(7, 180, 100, 80);
+      set = 1;
+    }
+}
+
+void simulLegGait() {
+  if (set == 1) {
+        setServoPos(0, 180, 180, 0);
+        set = 2;
+    } else if (set == 2) {
+        setServoPos(80, 100, 100, 80);
+        set = 1;
+  }
+}
 
 void loop()
 {
   static unsigned long servo_time;
 
   if (servoPosCheck()) {
-    // if all servos are in desired position, update desired position
-    if (set == 1) {
-        setServoPos(80, 180, 180, 80);
-        set = 2;
-        //Gait 1 crosslegged
-    } else if (set == 2) {
-        setServoPos(0, 100, 100, 0);
-        set = 1;
-        //Step 2 of gait 1 crosslegged
-    }
-
-    if (set == 3) {
-        setServoPos(0, 180, 180, 0);
-        set = 4;
-        //Gait 2
-    } else if (set == 4) {
-        setServoPos(80, 180, 180, 0);
-        set = 5;
-        //Step 2 of gait 2
-    } else if (set == 5) {
-        setServoPos(0, 100, 180, 0);
-        set = 6;
-        //Step 2 of gait 2
-    } else if (set == 6) {
-        setServoPos(0, 180, 100, 0);
-        set = 7;
-        //Step 2 of gait 2
-    }else if (set == 7) {
-        setServoPos(0, 180, 180, 80);
-        set = 3;
-        //Step 2 of gait 2
-    }
-
-    if (set == 8) {
-      setServoPos(50, 130, 180, 0);
-      set = 9;
-    } else if (set == 9) {
-      setServoPos(0, 180, 100, 80);
-      set = 8;
-    }
-
+    crawlingGait();
+    //undulatingGait(); 
+    // setServoPos(0, 180, 180, 0);  
+    
   }
   
   // check time since last servo position update 
@@ -122,6 +120,7 @@ void loop()
     // update rear_left position
     if (rear_left_pos > rear_left.read()) rear_left.write(rear_left.read() + 1);
     else if (rear_left_pos < rear_left.read()) rear_left.write(rear_left.read() - 1);
+    
   }
 
   //delay(1000);
