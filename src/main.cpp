@@ -8,18 +8,20 @@ int front_right_pos = 180;  // desired angle for front right leg
 int rear_left_pos = 180;    // desired angle for rear left leg
 int rear_right_pos = 0;   // desired angle for rear right leg
 
+// create servo objects
 Servo front_right; // front right leg
 Servo front_left;  // front left leg
 Servo rear_right;  // rear right leg
 Servo rear_left;   // rear left leg
 
+// define servo pins
 #define front_left_pin 9
 #define front_right_pin 7
 #define rear_left_pin 11
 #define rear_right_pin 5
 
-
-int set = 1;
+//this gets used in the gait functions
+int gait_step = 1;
 
 bool servoPosCheck()
 {
@@ -30,11 +32,21 @@ bool servoPosCheck()
     return true;
 }
 
+// gait_step desired servo positions, right_front and left_rear are inverted, so 0, 180, 180, 0 is position 0
 void setServoPos(int left_front, int right_front, int left_rear, int right_rear)
 {
   front_left_pos = left_front;
   front_right_pos = right_front;
   rear_left_pos = left_rear;
+  rear_right_pos = right_rear;
+}
+
+//adjusted version, use this for clearer code ?
+void setServoPosNew(int left_front, int right_front, int left_rear, int right_rear)
+{
+  front_left_pos = left_front;
+  front_right_pos = 180 - right_front;
+  rear_left_pos = 180 - left_rear;
   rear_right_pos = right_rear;
 }
 
@@ -53,71 +65,124 @@ void setup()
 
 void crawlingGait() {
   // if all servos are in desired position, update desired position
-    if (set == 1) {
+    if (gait_step == 1) {
         setServoPos(80, 180, 180, 80);
-        set = 2;
+        gait_step = 2;
         //Gait 1 crosslegged
-    } else if (set == 2) {
+    } else if (gait_step == 2) {
         setServoPos(80, 100, 100, 80);
-        set = 3;
-    } else if (set == 3) {
+        gait_step = 3;
+    } else if (gait_step == 3) {
         setServoPos(0, 100, 100, 0);
-        set = 1;
+        gait_step = 1;
         //Step 2 of gait 1 crosslegged
     }
 }
 
 void undulatingGait() {
-    if (set == 1) {
+    if (gait_step == 1) {
       setServoPos(0, 180, 180, 0);
-      set = 2;
-    } else if (set==2) {
+      gait_step = 2;
+    } else if (gait_step==2) {
       setServoPos(80, 100, 180, 0);
-      set = 3;
-    } else if (set == 3) {
+      gait_step = 3;
+    } else if (gait_step == 3) {
       setServoPos(80, 100, 100, 80);
-      set = 4;
-    } else if (set == 4) {
+      gait_step = 4;
+    } else if (gait_step == 4) {
       setServoPos(0, 180, 100, 80);
-      set = 1;
+      gait_step = 1;
     }
 }
 
+void pusherGait(){
+  if (gait_step == 1) {
+    setServoPos(120, 80, 180, 0);
+    gait_step = 2;
+  } else if (gait_step == 2) {
+    setServoPos(0, 180, 80, 120);
+    gait_step = 3;
+  } else if (gait_step == 3) {
+    setServoPos(0, 180, 180, 0);
+    gait_step = 1;
+  }
+
+}
+
 void simulLegGait() {
-  if (set == 1) {
+  if (gait_step == 1) {
         setServoPos(0, 180, 180, 0);
-        set = 2;
-    } else if (set == 2) {
+        gait_step = 2;
+    } else if (gait_step == 2) {
         setServoPos(80, 100, 100, 80);
-        set = 1;
+        gait_step = 1;
   }
 }
 
 void rippleGait() {
-  if (set == 1) {
+    if (gait_step == 1) {
     setServoPos(120, 180, 180, 120);
-    set = 4;
-  } else if (set == 2) {
+    gait_step = 4;
+  } else if (gait_step == 2) {
     setServoPos(0,60,60,0);
-    set = 1;
-  } else if (set == 3) {
+    gait_step = 1;
+  } else if (gait_step == 3) {
     setServoPos(0,180,60,120);
-    set = 2;
-  } else if (set == 4) {
+    gait_step = 2;
+  } else if (gait_step == 4) {
     setServoPos(120,60,180,0);
-    set = 3;
-  } 
+    gait_step = 3;
+  }
 }
 
+void stefanGait(){
+  if (gait_step == 1) {
+    Serial.println("Step 1");
+    setServoPosNew(120, 120, 0, 0);
+    gait_step = 2;
+  } else if (gait_step == 2) {
+    Serial.println("Step 2");
+    setServoPosNew(0,0,120,120);
+    gait_step = 3;
+  } else if (gait_step == 3) {
+    Serial.println("Step 3");
+    setServoPosNew(120,0,120,0);
+    gait_step = 4;
+  } else if (gait_step == 4) {
+    Serial.println("Step 4");
+    setServoPosNew(0,120,0,0);
+    gait_step = 1;
+  }
+}
+
+void crawlingGait2() {
+  // if all servos are in desired position, update desired position
+    if (gait_step == 1) {
+        setServoPosNew(120, 0, 0, 120);
+        gait_step = 2;
+        //Gait 1 crosslegged
+    } else if (gait_step == 2) {
+        setServoPosNew(120, 120, 120, 120);
+        gait_step = 3;
+    } else if (gait_step == 3) {
+        setServoPosNew(0, 120, 120, 0);
+        gait_step = 1;
+        //Step 2 of gait 1 crosslegged
+    }
+}
+//declare and innitialise servo_time
+static unsigned long servo_time = millis();
 void loop()
 {
-  static unsigned long servo_time;
-
+  // check if all servos are in desired position and if they are start the next step in the gait
   if (servoPosCheck()) {
     //crawlingGait();
     //undulatingGait(); 
+    //pusherGait();
     //simulLegGait();
-    rippleGait();
+    //rippleGait();
+    stefanGait(); 
+    //crawlingGait2();
   }
   
   // check time since last servo position update 
