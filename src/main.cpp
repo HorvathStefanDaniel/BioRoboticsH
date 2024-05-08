@@ -1,4 +1,4 @@
-#define SERVO_SPEED  15// servo speed in ms
+#define SERVO_SPEED 5// servo speed in ms
 #include <Servo.h>
 #include <Arduino.h>
 
@@ -17,12 +17,7 @@ Servo rear_left;   // rear left leg
 #define front_right_pin 7
 #define rear_left_pin 11
 #define rear_right_pin 5
-/*
-Actual pins
-#define rear_left_pin 11
-#define rear_right_pin 5
 
-*/
 
 int set = 1;
 
@@ -74,10 +69,16 @@ void crawlingGait() {
 
 void undulatingGait() {
     if (set == 1) {
-      setServoPos(57, 130, 180, 0);
+      setServoPos(0, 180, 180, 0);
       set = 2;
-    } else if (set == 2) {
-      setServoPos(7, 180, 100, 80);
+    } else if (set==2) {
+      setServoPos(80, 100, 180, 0);
+      set = 3;
+    } else if (set == 3) {
+      setServoPos(80, 100, 100, 80);
+      set = 4;
+    } else if (set == 4) {
+      setServoPos(0, 180, 100, 80);
       set = 1;
     }
 }
@@ -92,15 +93,31 @@ void simulLegGait() {
   }
 }
 
+void rippleGait() {
+  if (set == 1) {
+    setServoPos(180, 180, 180, 180);
+    set = 2;
+  } else if (set == 2) {
+    setServoPos(0,0,0,0);
+    set = 3;
+  } else if (set == 3) {
+    setServoPos(0,180,0,180);
+    set = 4;
+  } else if (set == 4) {
+    setServoPos(180,0,180,0);
+    set = 1;
+  } 
+}
+
 void loop()
 {
   static unsigned long servo_time;
 
   if (servoPosCheck()) {
-    crawlingGait();
-    //undulatingGait(); 
-    // setServoPos(0, 180, 180, 0);  
-    
+    //crawlingGait();
+    undulatingGait(); 
+    //simulLegGait();
+    //rippleGait();
   }
   
   // check time since last servo position update 
