@@ -95,17 +95,17 @@ void simulLegGait() {
 
 void rippleGait() {
   if (set == 1) {
-    setServoPos(180, 180, 180, 180);
-    set = 2;
-  } else if (set == 2) {
-    setServoPos(0,0,0,0);
-    set = 3;
-  } else if (set == 3) {
-    setServoPos(0,180,0,180);
+    setServoPos(120, 180, 180, 120);
     set = 4;
-  } else if (set == 4) {
-    setServoPos(180,0,180,0);
+  } else if (set == 2) {
+    setServoPos(0,60,60,0);
     set = 1;
+  } else if (set == 3) {
+    setServoPos(0,180,60,120);
+    set = 2;
+  } else if (set == 4) {
+    setServoPos(120,60,180,0);
+    set = 3;
   } 
 }
 
@@ -115,9 +115,9 @@ void loop()
 
   if (servoPosCheck()) {
     //crawlingGait();
-    undulatingGait(); 
+    //undulatingGait(); 
     //simulLegGait();
-    //rippleGait();
+    rippleGait();
   }
   
   // check time since last servo position update 
