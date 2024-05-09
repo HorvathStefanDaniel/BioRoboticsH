@@ -33,7 +33,7 @@ bool servoPosCheck()
 }
 
 // gait_step desired servo positions, right_front and left_rear are inverted, so 0, 180, 180, 0 is position 0
-void setServoPos(int left_front, int right_front, int left_rear, int right_rear)
+void setServoPosOld(int left_front, int right_front, int left_rear, int right_rear)
 {
   front_left_pos = left_front;
   front_right_pos = right_front;
@@ -42,7 +42,7 @@ void setServoPos(int left_front, int right_front, int left_rear, int right_rear)
 }
 
 //adjusted version, use this for clearer code ?
-void setServoPosNew(int left_front, int right_front, int left_rear, int right_rear)
+void setServoPos(int left_front, int right_front, int left_rear, int right_rear)
 {
   front_left_pos = left_front;
   front_right_pos = 180 - right_front;
@@ -66,44 +66,40 @@ void setup()
 void crawlingGait() {
   // if all servos are in desired position, update desired position
     if (gait_step == 1) {
-        setServoPos(80, 180, 180, 80);
+        setServoPos(120, 0, 0, 120);
         gait_step = 2;
         //Gait 1 crosslegged
     } else if (gait_step == 2) {
-        setServoPos(80, 100, 100, 80);
-        gait_step = 3;
-    } else if (gait_step == 3) {
-        setServoPos(0, 100, 100, 0);
+        setServoPos(0, 120, 120, 0);
         gait_step = 1;
-        //Step 2 of gait 1 crosslegged
     }
 }
 
 void undulatingGait() {
     if (gait_step == 1) {
-      setServoPos(0, 180, 180, 0);
+      setServoPos(0, 0, 0, 0);
       gait_step = 2;
     } else if (gait_step==2) {
-      setServoPos(80, 100, 180, 0);
+      setServoPos(80, 80, 0, 0);
       gait_step = 3;
     } else if (gait_step == 3) {
-      setServoPos(80, 100, 100, 80);
+      setServoPos(80, 80, 80, 80);
       gait_step = 4;
     } else if (gait_step == 4) {
-      setServoPos(0, 180, 100, 80);
+      setServoPos(0, 0, 80, 80);
       gait_step = 1;
     }
 }
 
 void pusherGait(){
   if (gait_step == 1) {
-    setServoPos(120, 80, 180, 0);
+    setServoPos(120, 120, 0, 0);
     gait_step = 2;
   } else if (gait_step == 2) {
-    setServoPos(0, 180, 80, 120);
+    setServoPos(0, 0, 120, 120);
     gait_step = 3;
   } else if (gait_step == 3) {
-    setServoPos(0, 180, 180, 0);
+    setServoPos(0, 0, 0, 0);
     gait_step = 1;
   }
 
@@ -111,46 +107,46 @@ void pusherGait(){
 
 void simulLegGait() {
   if (gait_step == 1) {
-        setServoPos(0, 180, 180, 0);
+        setServoPos(0, 0, 0, 0);
         gait_step = 2;
     } else if (gait_step == 2) {
-        setServoPos(80, 100, 100, 80);
+        setServoPos(80, 80, 80, 80);
         gait_step = 1;
   }
 }
 
 void rippleGait() {
     if (gait_step == 1) {
-    setServoPos(120, 180, 180, 120);
-    gait_step = 4;
-  } else if (gait_step == 2) {
-    setServoPos(0,60,60,0);
-    gait_step = 1;
-  } else if (gait_step == 3) {
-    setServoPos(0,180,60,120);
+    setServoPos(120, 0, 0, 120);
     gait_step = 2;
-  } else if (gait_step == 4) {
-    setServoPos(120,60,180,0);
+  } else if (gait_step == 2) {
+    setServoPos(0,120,120,0);
     gait_step = 3;
+  } else if (gait_step == 3) {
+    setServoPos(0,0,120,120);
+    gait_step = 4;
+  } else if (gait_step == 4) {
+    setServoPos(120,120,0,0);
+    gait_step = 1;
   }
 }
 
 void stefanGait(){
   if (gait_step == 1) {
-    Serial.println("Step 1");
-    setServoPosNew(120, 120, 0, 0);
+    //Serial.println("Step 1");
+    setServoPos(120, 120, 0, 0);
     gait_step = 2;
   } else if (gait_step == 2) {
-    Serial.println("Step 2");
-    setServoPosNew(0,0,120,120);
+    //Serial.println("Step 2");
+    setServoPos(0,0,120,120);
     gait_step = 3;
   } else if (gait_step == 3) {
-    Serial.println("Step 3");
-    setServoPosNew(120,0,120,0);
+    //Serial.println("Step 3");
+    setServoPos(120,0,120,0);
     gait_step = 4;
   } else if (gait_step == 4) {
-    Serial.println("Step 4");
-    setServoPosNew(0,120,0,0);
+    //Serial.println("Step 4");
+    setServoPos(0,120,0,0);
     gait_step = 1;
   }
 }
@@ -158,17 +154,61 @@ void stefanGait(){
 void crawlingGait2() {
   // if all servos are in desired position, update desired position
     if (gait_step == 1) {
-        setServoPosNew(120, 0, 0, 120);
+        setServoPos(120, 0, 120, 0);
         gait_step = 2;
         //Gait 1 crosslegged
     } else if (gait_step == 2) {
-        setServoPosNew(120, 120, 120, 120);
-        gait_step = 3;
-    } else if (gait_step == 3) {
-        setServoPosNew(0, 120, 120, 0);
+        setServoPos(0, 120, 0, 120);
         gait_step = 1;
-        //Step 2 of gait 1 crosslegged
     }
+}
+
+void turningGait(String direction) {
+  if (direction == "left") {
+    if (gait_step == 1) {
+      setServoPos(0,120,0,0);
+      gait_step = 2;
+    } else if (gait_step == 2) {
+      setServoPos(0,120,0,120);
+      gait_step = 3;
+    } else if (gait_step == 3) {
+      setServoPos(0,0,0,120);
+      gait_step = 4;
+    } else if (gait_step == 4) {
+      setServoPos(0,0,0,0);
+      gait_step = 1;
+    }
+  } else {
+    if (gait_step == 1) {
+      setServoPos(120,0,0,0);
+      gait_step = 2;
+    } else if (gait_step == 2) {
+      setServoPos(120,0,120,0);
+      gait_step = 3;
+    } else if (gait_step == 3) {
+      setServoPos(0,0,120,0);
+      gait_step = 4;
+    } else if (gait_step == 4) {
+      setServoPos(0,0,0,0);
+      gait_step = 1;
+    }
+  }
+}
+
+unsigned long turning_time = millis();
+static unsigned long turn_time = 10000;
+void turning() {
+  if((millis()-turning_time) < turn_time/2) {
+    Serial.println("Turning left");
+    turningGait("right");
+  } 
+  if (millis() - turning_time >= turn_time/2) {
+    Serial.println("Turning right");
+    turningGait("left");
+  }
+  if((millis()-turning_time) >= turn_time*2) {
+    turning_time = millis();
+  }
 }
 //declare and innitialise servo_time
 static unsigned long servo_time = millis();
@@ -181,8 +221,13 @@ void loop()
     //pusherGait();
     //simulLegGait();
     //rippleGait();
-    stefanGait(); 
+
+
+    //stefanGait(); 
     //crawlingGait2();
+    turningGait("right");
+    //turning();
+    Serial.println("Step " + String(gait_step));
   }
   
   // check time since last servo position update 
